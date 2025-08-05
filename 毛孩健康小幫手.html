@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>毛孩症狀小幫手</title>
+  <style>
+    :root {
+      --bg-color: #f8f9fa;
+      --accent-color: #6c9bcf;
+      --text-color: #2c3e50;
+      --card-bg: #ffffff;
+      --border-color: #dcdfe6;
+    }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      max-width: 600px;
+      margin: 3em auto;
+      padding: 0 1em;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.8em;
+      color: var(--accent-color);
+      margin-bottom: 1em;
+    }
+    label {
+      font-weight: 500;
+      margin-top: 1.5em;
+      display: block;
+    }
+    select, button {
+      width: 100%;
+      padding: 0.7em;
+      margin-top: 0.5em;
+      font-size: 1em;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background-color: white;
+    }
+    button {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 1.5em;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #5b8ac4;
+    }
+    #result {
+      margin-top: 2em;
+    }
+    .symptom-result {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1em;
+      margin-bottom: 1.2em;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    .symptom-result h3 {
+      margin-top: 0;
+      color: var(--accent-color);
+    }
+  </style>
+</head>
+<body>
+  <h1>🐾 毛孩症狀小幫手</h1>
+
+  <label for="animal">選擇動物：</label>
+  <select id="animal">
+    <option value="">請選擇</option>
+    <option value="狗">🐶 狗</option>
+    <option value="貓">🐱 貓</option>
+  </select>
+
+  <label for="symptoms">選擇症狀（可多選）：</label>
+  <select id="symptoms" multiple size="6">
+    <option value="食慾不振">食慾不振</option>
+    <option value="抓癢">抓癢</option>
+    <option value="打噴嚏">打噴嚏</option>
+    <option value="拉肚子">拉肚子</option>
+    <option value="掉毛">掉毛</option>
+    <option value="嘔吐">嘔吐</option>
+  </select>
+
+  <button onclick="checkSymptoms()">查詢建議</button>
+
+  <div id="result"></div>
+
+  <script>
+    const data = {
+      "食慾不振": {
+        animal: ["狗", "貓"],
+        reason: "腸胃炎、牙痛、壓力、異物",
+        level: "⏳ 可觀察",
+        advice: "禁食6小時，觀察嘔吐/精神，有異狀就醫"
+      },
+      "抓癢": {
+        animal: ["狗"],
+        reason: "跳蚤、黴菌、過敏、皮膚病",
+        level: "⏳ 可觀察",
+        advice: "看有無紅疹、掉毛，建議清潔環境＋除蟲"
+      },
+      "打噴嚏": {
+        animal: ["貓"],
+        reason: "感冒、灰塵過敏、病毒感染",
+        level: "⏳ 可觀察",
+        advice: "若有黃綠鼻涕則建議就醫"
+      },
+      "拉肚子": {
+        animal: ["狗", "貓"],
+        reason: "食物不適、寄生蟲、腸胃炎",
+        level: "⚠️ 建議就醫",
+        advice: "有血、有黏液立即就醫，並補充水分"
+      },
+      "掉毛": {
+        animal: ["狗", "貓"],
+        reason: "換季、營養不良、皮膚病",
+        level: "⏳ 可觀察",
+        advice: "補營養、觀察有無皮屑，長期掉毛看獸醫"
+      },
+      "嘔吐": {
+        animal: ["狗", "貓"],
+        reason: "吃太快、寄生蟲、腸胃炎",
+        level: "⚠️ 建議就醫",
+        advice: "嘔吐超過2次或有血，建議就醫"
+      }
+    };
+
+    function checkSymptoms() {
+      const animal = document.getElementById("animal").value;
+      const selected = Array.from(document.getElementById("symptoms").selectedOptions).map(opt => opt.value);
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "";
+
+      if (!animal || selected.length === 0) {
+        resultDiv.innerHTML = "❗ 請選擇動物與至少一項症狀。";
+        return;
+      }
+
+      selected.forEach(symptom => {
+        const item = data[symptom];
+        if (item.animal.includes(animal)) {
+          resultDiv.innerHTML += `
+            <div class="symptom-result">
+              <h3>🔍 ${symptom}</h3>
+              <p><strong>可能原因：</strong> ${item.reason}</p>
+              <p><strong>緊急程度：</strong> ${item.level}</p>
+              <p><strong>建議行動：</strong> ${item.advice}</p>
+            </div>
+          `;
+        }
+      });
+    }
+  </script>
+</body>
+</html>
