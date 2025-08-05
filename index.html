@@ -79,13 +79,17 @@
   </select>
 
   <label for="symptoms">選擇症狀（可多選）：</label>
-  <select id="symptoms" multiple size="6">
+  <select id="symptoms" multiple size="10">
     <option value="食慾不振">食慾不振</option>
     <option value="抓癢">抓癢</option>
     <option value="打噴嚏">打噴嚏</option>
     <option value="拉肚子">拉肚子</option>
     <option value="掉毛">掉毛</option>
     <option value="嘔吐">嘔吐</option>
+    <option value="咳嗽">咳嗽</option>
+    <option value="眼睛紅">眼睛紅</option>
+    <option value="耳朵有異味">耳朵有異味</option>
+    <option value="走路跛腳">走路跛腳</option>
   </select>
 
   <button onclick="checkSymptoms()">查詢建議</button>
@@ -129,6 +133,30 @@
         reason: "吃太快、寄生蟲、腸胃炎",
         level: "⚠️ 建議就醫",
         advice: "嘔吐超過2次或有血，建議就醫"
+      },
+      "咳嗽": {
+        animal: ["狗", "貓"],
+        reason: "呼吸道感染、氣管炎、異物吸入",
+        level: "⚠️ 建議就醫",
+        advice: "觀察有無呼吸困難，建議盡快就醫檢查"
+      },
+      "眼睛紅": {
+        animal: ["狗", "貓"],
+        reason: "結膜炎、過敏、外傷",
+        level: "⏳ 可觀察",
+        advice: "可用生理食鹽水清潔，若惡化或分泌物增加則就醫"
+      },
+      "耳朵有異味": {
+        animal: ["狗", "貓"],
+        reason: "耳炎、黴菌感染、耳垢過多",
+        level: "⏳ 可觀察",
+        advice: "用濕紙巾或耳朵清潔液輕拭，若抓耳或搖頭明顯就醫"
+      },
+      "走路跛腳": {
+        animal: ["狗"],
+        reason: "扭傷、異物卡住、關節問題",
+        level: "⚠️ 建議就醫",
+        advice: "檢查腳掌與指縫，若腫脹或持續跛腳，立即就醫"
       }
     };
 
@@ -145,7 +173,7 @@
 
       selected.forEach(symptom => {
         const item = data[symptom];
-        if (item.animal.includes(animal)) {
+        if (item && item.animal.includes(animal)) {
           resultDiv.innerHTML += `
             <div class="symptom-result">
               <h3>🔍 ${symptom}</h3>
